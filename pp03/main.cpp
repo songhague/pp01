@@ -1,6 +1,6 @@
 #include <iostream>
 using namespace std;
-
+//4ÁÖÂ÷
 class A 
 {
 public :

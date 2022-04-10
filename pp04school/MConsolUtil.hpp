@@ -7,11 +7,11 @@ using namespace std;
 
 namespace MuSeoun_Engine
 {
-    class ConsoleRenderer
+    class MConsoleRenderer
     {
     public:
-        ConsoleRenderer() { SetCursorState(false); }//持失切
-        ~ConsoleRenderer() {}//社瑚切
+        MConsoleRenderer() { SetCursorState(false); }//持失切
+        ~MConsoleRenderer() {}//社瑚切
 
         void MoveCursor(short x, short y)
         {

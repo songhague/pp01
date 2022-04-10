@@ -72,7 +72,7 @@ namespace MuSeoun_Engine
 			
 			cout << "Rendering speed: " << renderDuration.count() << "sec" << endl;
 
-			int remainingFrameTime = 100 - (int)(renderDuration.count() * 1000.0);
+			int remainingFrameTime = 100 - (int)(renderDuration.count() * 1000000);
 
 			if (remainingFrameTime > 0)
 				this_thread::sleep_for(chrono::microseconds(remainingFrameTime));

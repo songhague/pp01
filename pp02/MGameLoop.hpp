@@ -12,6 +12,7 @@ namespace Musoeun
 		key[3] = new JumpCommand();
 		key[4] = new RunCommand();
 		//std::cout << "ÃÊ±âÈ­...\n";
+		//3°­²¨
 	}
 
 	void Input()

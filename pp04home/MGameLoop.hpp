@@ -2,6 +2,7 @@
 #include <chrono>
 #include <thread>
 #include "MConsoIUtill.hpp"
+#include "Player.hpp"
 
 using namespace std;
 
@@ -13,6 +14,11 @@ namespace MuSeoun_Engine
 		bool _isGameRunning;
 		MConsoleRenderer cRenderer;
 
+		chrono::system_clock::time_point startRenderTimePoint;
+		chrono::duration<double> renderDuration;
+
+		Player p;
+
 	public:
 		MGameLoop() { _isGameRunning = false; }
 		~MGameLoop() {}
@@ -21,12 +27,14 @@ namespace MuSeoun_Engine
 		{
 			_isGameRunning = true;
 			Initialize();
+			startRenderTimePoint = chrono::system_clock::now();
 
 			while (_isGameRunning)
 			{
 				Input();
 				Update();
 				Render();
+				// 한바뀌 돌때 이 사이클이 나옴
 			}
 			Release();
 		}
@@ -46,14 +54,14 @@ namespace MuSeoun_Engine
 
 		void Input()
 		{
-			/*	if (GetAsyncKeyState(VK_SPACE) & 0x8000 || GetAsyncKeyState(VK_SPACE) & 0x8001)
-				{
-
-				}
-				else
-				{
-
-				}*/
+			if (GetAsyncKeyState(VK_SPACE) & 0x8000 || GetAsyncKeyState(VK_SPACE) & 0x8001)
+			{
+				p.isKeyPressed();
+			}
+			else
+			{
+				p.isKeyUnpressed();
+			}
 
 		}
 		void Update()
@@ -62,24 +70,21 @@ namespace MuSeoun_Engine
 		}
 		void Render()
 		{
-			chrono::system_clock::time_point startRenderTimePoint = chrono::system_clock::now();
+			
 
 			cRenderer.Clear();
-			cRenderer.MoveCursor(10, 5);
-
-			chrono::duration<double> renderDuration = chrono::system_clock::now() - startRenderTimePoint;
-			
-			string fps = "FPS(milliseconds) : " + to_string(renderDuration.count()*1000);
-			cRenderer.DrawString(fps);
-			
-			//cout << "Rendering speed : " << renderDuration.count() << "sec" << endl;
-
-			int remainingFrameTime = 100 - (int)(renderDuration.count());
-			if (remainingFrameTime > 0)
-				this_thread::sleep_for(chrono::milliseconds(remainingFrameTime));
-		}
-
-
 		
+
+			cRenderer.MoveCursor(p.x, p.y);
+			cRenderer.DrawString("p");
+
+			cRenderer.MoveCursor(10, 5);
+			renderDuration = chrono::system_clock::now() - startRenderTimePoint;
+			startRenderTimePoint = chrono::system_clock::now();
+			string fps = "FPS:" + to_string(10./ renderDuration.count());
+			cRenderer.DrawString(fps);
+
+			this_thread::sleep_for(chrono::milliseconds(20));//0.05초
+		}
 	};
 }

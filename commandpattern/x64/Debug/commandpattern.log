@@ -1,0 +1,4 @@
+﻿  main.cpp
+C:\Users\song2\source\repos\pp01\commandpattern\SKCommand.hpp(2,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+C:\Users\song2\source\repos\pp01\commandpattern\main.cpp(7,1): warning C4326: 'main'의 반환 형식이 'int'이어야 하는데 'void'입니다.
+  commandpattern.vcxproj -> C:\Users\song2\source\repos\pp01\x64\Debug\commandpattern.exe

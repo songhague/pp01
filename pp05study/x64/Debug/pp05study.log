@@ -1,0 +1,5 @@
+﻿  main.cpp
+C:\Users\song2\source\repos\pp01\pp05study\main.cpp(17,10): error C2672: 'sum': 일치하는 오버로드된 함수가 없습니다.
+C:\Users\song2\source\repos\pp01\pp05study\main.cpp(17,37): error C2977: 'sum': 템플릿 인수가 너무 많습니다.
+C:\Users\song2\source\repos\pp01\pp05study\main.cpp(8): message : 'sum' 선언을 참조하십시오.
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(700,5): error MSB6006: "CL.exe"이(가) 종료되었습니다(코드: 2).

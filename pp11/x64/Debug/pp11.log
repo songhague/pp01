@@ -1,1 +1,7 @@
-﻿
+﻿  main.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.20348.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': 매크로 재정의
+C:\Users\song2\source\repos\pp01\packages\glfw.3.3.7\build\native\include\GLFW\glfw3.h(123): message : 'APIENTRY'의 이전 정의를 참조하십시오.
+C:\Users\song2\source\repos\pp01\pp11\main.cpp(38,19): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+C:\Users\song2\source\repos\pp01\pp11\main.cpp(40,18): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+C:\Users\song2\source\repos\pp01\pp11\main.cpp(41,18): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+  pp11.vcxproj -> C:\Users\song2\source\repos\pp01\x64\Debug\pp11.exe

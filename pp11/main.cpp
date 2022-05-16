@@ -85,7 +85,7 @@ int main(void)
             glVertex2f(0.1f, -0.1f);
             glVertex2f(-0.1f, 0.1f);
             glEnd();
-            cout << "이대환 생성!!!\n";
+            cout << "겹침!!!\n";
         }
 
         glBegin(GL_TRIANGLES);

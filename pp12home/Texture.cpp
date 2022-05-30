@@ -4,14 +4,15 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <Windows.h>
+#include<crtdbg.h>
 
 //#include "MMath.hpp"
 //#include "Player.hpp"
 
 #pragma comment(lib, "OpenGL32")
 
-static GLuint texName;
-static GLuint texNames;
+static GLuint texName[2];
+//static GLuint texNames;
 
 //비트맵 헤더를 한 묶음으로 다시 구조체로 묶었어요. 함수처리를 편하게 하려구요.
 typedef struct tagBITMAPHEADER {
@@ -20,7 +21,7 @@ typedef struct tagBITMAPHEADER {
     RGBQUAD hRGB[256];
 }BITMAPHEADER;
 
-BYTE* LoadBitmapFile(BITMAPHEADER* bitmapHeader, int* imgSize, const char* filename/*, int* imgSizes, const char* filenames*/)
+BYTE* LoadBitmapFile(BITMAPHEADER* bitmapHeader, int* imgSize, const char* filename)
 {
     FILE* fp = fopen(filename, "rb");	//파일을 이진읽기모드로 열기
     if (fp == NULL)
@@ -43,28 +44,6 @@ BYTE* LoadBitmapFile(BITMAPHEADER* bitmapHeader, int* imgSize, const char* filen
 
         return image;
     }
-
-    //FILE* fps = fopen(filenames, "rbs");	//파일을 이진읽기모드로 열기
-    //if (fps == NULL)
-    //{
-    //    printf("파일로딩에 실패했습니다.\n");	//fopen에 실패하면 NULL값을 리턴
-    //    return NULL;
-    //}
-    //else
-    //{
-    //    fread(&bitmapHeader->bf, sizeof(BITMAPFILEHEADER), 1, fps);	//비트맵파일헤더 읽기
-    //    fread(&bitmapHeader->bi, sizeof(BITMAPINFOHEADER), 1, fps);	//비트맵인포헤더 읽기
-    //    fread(&bitmapHeader->hRGB, sizeof(RGBQUAD), 256, fps);	//색상팔렛트 읽기
-
-    //    int imgSizeTemp = bitmapHeader->bi.biWidth * bitmapHeader->bi.biHeight;	//이미지 사이즈 계산
-    //    *imgSize = imgSizeTemp;	// 이미지 사이즈를 상위 변수에 할당
-
-    //    BYTE* images = (BYTE*)malloc(sizeof(BYTE) * imgSizeTemp);	//이미지크기만큼 메모리할당
-    //    fread(images, sizeof(BYTE), imgSizeTemp, fps);//이미지 크기만큼 파일에서 읽어오기
-    //    fclose(fps);
-
-    //    return images;
-    //}
 }
 
 void init(void)
@@ -74,12 +53,13 @@ void init(void)
     BITMAPHEADER originalHeader;	//비트맵의 헤더부분을 파일에서 읽어 저장할 구조체
     int imgSize;			//이미지의 크기를 저장할 변수
     BYTE* image = LoadBitmapFile(&originalHeader, &imgSize, "lena_gray.bmp"); //비트맵파일을 읽어 화소정보를 저장
+    BYTE* image1 = LoadBitmapFile(&originalHeader, &imgSize, "ch.bmp");
     if (image == NULL) return;//파일 읽기에 실패하면 프로그램 종료
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    glGenTextures(1, &texName);
-    glBindTexture(GL_TEXTURE_2D, texName);
+    glGenTextures(2, texName);//생성한다.
+    glBindTexture(GL_TEXTURE_2D, texName[0]);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -89,31 +69,17 @@ void init(void)
         GL_NEAREST);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 512, 512, 0, GL_ALPHA, GL_BYTE, image);//사진 크기
-}
+    
+    glBindTexture(GL_TEXTURE_2D, texName[1]);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
+        GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+        GL_NEAREST);
 
-//void inits(void)
-//{
-//    glClearColor(0.0, 0.0, 0.0, 0.0);
-//
-//    BITMAPHEADER originalHeaders;	//비트맵의 헤더부분을 파일에서 읽어 저장할 구조체
-//    int imgSizes;			//이미지의 크기를 저장할 변수
-//    BYTE* images = LoadBitmapFile(&originalHeaders, &imgSizes, "ch.bmp"); //비트맵파일을 읽어 화소정보를 저장
-//    if (images == NULL) return;//파일 읽기에 실패하면 프로그램 종료
-//
-//    glPixelStorei(GL_UNPACK_ALIGNMENT, 2);
-//
-//    glGenTextures(1, &texNames);
-//    glBindTexture(GL_TEXTURE_2D, texNames);
-//
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
-//        GL_NEAREST);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-//        GL_NEAREST);
-//
-//    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 720, 440, 0, GL_ALPHA, GL_BYTE, images);//사진 크기
-//}
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 720, 440, 0, GL_ALPHA, GL_BYTE, image1);
+}
 
 static void error_callback(int error, const char* description)
 {
@@ -148,28 +114,32 @@ int main(void)
 
     while (!glfwWindowShouldClose(window))
     {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//update (지운다)
         glEnable(GL_TEXTURE_2D);
         glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-        glBindTexture(GL_TEXTURE_2D, texName);
+        glBindTexture(GL_TEXTURE_2D, texName[0]);//glBindTexture textName연결?
         glBegin(GL_TRIANGLES);
         glTexCoord2f(0.0, 0.0); glVertex3f(-1.0, -1.0, 0.0);
         glTexCoord2f(1.0, 0.0); glVertex3f(1.0, -1.0, 0.0);
         glTexCoord2f(0.5, 1.0); glVertex3f(0.0, 1.0, 0.0);
+        glEnd();
 
+        glBindTexture(GL_TEXTURE_2D, texName[1]);
+        glBegin(GL_TRIANGLES);
         glTexCoord2f(0.0, 0.0); glVertex3f(-0.5, -0.5, 0.0);
         glTexCoord2f(1.0, 0.0); glVertex3f(1.0, -0.5, 0.0);
         glTexCoord2f(0.5, 1.0); glVertex3f(0.5, 1.0, 0.0);
-        glEnd();
-        glFlush();
+
+        glEnd();//update
+        glFlush();//랜더
 
         glDisable(GL_TEXTURE_2D);
 
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+        glfwSwapBuffers(window);//랜더 밖에서 1번만
+        glfwPollEvents();//Input 이벤트를 발생했는지 확인하고 있으면 keycallback불러온다
     }
     glfwDestroyWindow(window);
     glfwTerminate();
-
+    _CrtDumpMemoryLeaks();
     exit(EXIT_SUCCESS);
 }
